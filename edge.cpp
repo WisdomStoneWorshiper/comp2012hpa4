@@ -1,6 +1,6 @@
 #include "edge.h"
 #include <cmath>
-#include <QDebug>
+//#include <QDebug>
 #include <QBitmap>
 #include <QPoint>
 #include <QWidget>
@@ -11,11 +11,9 @@ Edge::Edge(Vertex * firstPoint ,Vertex * secondPoint, int distance,QWidget* pare
                                                                     , secondPoint(secondPoint)
                                                                     , distance(distance)
 {
+    color = Qt::black;
     setVisible(true);
-   // lower();
-    qDebug()<<"y21";
     update();
-    qDebug()<<"y22";
 }
 
 Edge::~Edge(){
@@ -36,12 +34,11 @@ void Edge::paintEvent(QPaintEvent * e){
     QPixmap image(size());
     image.fill(Qt::transparent);
     QPainter painter(&image);
-    QColor color = Qt::black;
     color.setAlpha(150);
     QPen pen(color);
     QPoint lineLefttop;
-    lineLefttop.setX(std::max(0, std::min(firstPoint->x(), secondPoint->x()) -40));
-    lineLefttop.setY(std::max(0, std::min(firstPoint->y(), secondPoint->y()) -40));
+    lineLefttop.setX(std::max(0, std::min(firstPoint->x(), secondPoint->x()) -20));
+    lineLefttop.setY(std::max(0, std::min(firstPoint->y(), secondPoint->y()) -20));
     //qDebug()<<firstPoint<<secondPoint;
 
     QLineF line(firstPoint->pos()-lineLefttop,secondPoint->pos()-lineLefttop);
@@ -79,4 +76,12 @@ Vertex* Edge::getSecondPoint(){
 
 int Edge::getDistance(){
     return distance;
+}
+
+void Edge::turnBlue(){
+    color=Qt::blue;
+}
+
+void Edge::resetColor(){
+    color=Qt::black;
 }

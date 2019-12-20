@@ -21,6 +21,7 @@ public:
     void connectVertex(std::list<Vertex*> & );
     void deleteEdge(Edge*);
     void startDijkstra(Vertex*);
+    void showPath(Vertex*);
 public slots:
 
 private:

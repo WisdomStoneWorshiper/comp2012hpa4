@@ -7,7 +7,19 @@ Manager::Manager()
 }
 
 Manager::~Manager(){
+    for (int j=0;j<e_list.size();++j){
+        delete e_list[j];
+    }
+    e_list.clear();
+    for(int i=0;i<v_list.size();++i){
+        //QString l;
+        for(list<Vertex*>::iterator j=v_list[i].begin();j!=v_list[i].end();++j){
+            delete *j;
+        }
+        //qDebug()<<l;
+    }
     v_list.clear();
+
 }
 
 
@@ -71,13 +83,7 @@ void Manager::deleteEdge(Edge * target){
 }
 
 void Manager::startDijkstra(Vertex *startPoint){
-    for(int i=0;i<v_list.size();++i){
-        QString l;
-        for(list<Vertex*>::iterator j=v_list[i].begin();j!=v_list[i].end();++j){
-            l=l+" "+(*j)->getId();
-        }
-        qDebug()<<l;
-    }
+
     Hashtable* unvisitVertexTable{new Hashtable()};
     for (int i=0;i<v_list.size();++i){
         unvisitVertexTable->insertVertex(v_list[i].front());
@@ -128,7 +134,10 @@ void Manager::startDijkstra(Vertex *startPoint){
                 pq.insert(*i,(*i)->getDistance());
                 vector<list<Vertex*>>::iterator q=find_if(result.begin(),result.end(),
                                                 [&](list<Vertex*> temp){return temp.front()==*i;});
-                if (q->back()==q->front())
+                if (startPoint==q->front()){
+                    continue;
+                }
+                else if (q->back()==q->front())
                     q->push_back(current);
                 else{
                     q->pop_back();
@@ -138,8 +147,18 @@ void Manager::startDijkstra(Vertex *startPoint){
             (*i)->repaint();
         }
     }
-
+    delete unvisitVertexTable;
 }
 
-
+void Manager::showPath(Vertex * target){
+    vector<list<Vertex*>>::iterator resultListVectorPointer=find_if(result.begin(),result.end(),
+                                    [&](list<Vertex*> temp){return temp.front()==target;});
+    if (resultListVectorPointer->front()==resultListVectorPointer->back())
+        return;
+    vector<Edge*>::iterator targetEdge=find_if(e_list.begin(),e_list.end(),
+                                               [&](Edge* e){return (e->contains(resultListVectorPointer->front())&&e->contains(resultListVectorPointer->back()));});
+    if (targetEdge!=e_list.end())
+        (*targetEdge)->turnBlue();
+    showPath(resultListVectorPointer->back());
+}
 

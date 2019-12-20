@@ -27,6 +27,7 @@ public:
 public slots:
     void deleteEdgeAction(Edge*);
     void startCalcalationAction(Vertex*);
+    void showPathAction(Vertex*);
 private slots:
     void on_addVertexBtn_toggled(bool checked);
     void rightClickVertex(const int &);

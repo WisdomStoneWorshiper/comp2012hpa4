@@ -22,14 +22,16 @@ signals:
     void deleteAction(const int &);
     void addEdgeAction(Vertex*,const bool &);
     void startCalAction(Vertex*);
+    void showP(Vertex*);
     //void moveEdgeAction(Vertex*);
 public slots:
     bool eventFilter(QObject *, QEvent *event) override;
     void catchEdgeBtnState(bool);
     void catchStartBtnState(bool);
+    void catchShowPathBtnState(bool);
 private:
     int id, tentativeDistance;
-    bool edgeBtnToggle, selected, visited, startBtnToggle;
+    bool edgeBtnToggle, selected, visited, startBtnToggle, showPathToggle;
 };
 
 #endif // VERTEX_H

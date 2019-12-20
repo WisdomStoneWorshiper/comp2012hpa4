@@ -9,6 +9,7 @@ Vertex::Vertex(int x, int y, QWidget * parent):QLabel(parent)
     id=nextID++;
     edgeBtnToggle=false;
     startBtnToggle=false;
+    showPathToggle=false;
     selected=false;
     visited=false;
     tentativeDistance=-1;
@@ -17,7 +18,8 @@ Vertex::Vertex(int x, int y, QWidget * parent):QLabel(parent)
     setStyleSheet("font-size : 25px;"
                   "border: 3px solid ;"
                   "border-radius : 20px;"
-                  "border-color:black;");
+                  "border-color:black;"
+                  "background-color:white;");
     installEventFilter(this);
     //setText("y");
 }
@@ -37,6 +39,10 @@ void Vertex::catchEdgeBtnState(bool state){
 
 void Vertex::catchStartBtnState(bool state){
     startBtnToggle=state;
+}
+
+void Vertex::catchShowPathBtnState(bool state){
+    showPathToggle=state;
 }
 
 bool Vertex::eventFilter(QObject *, QEvent *event) {
@@ -62,15 +68,23 @@ static bool isHover = false;
                     setStyleSheet("font-size : 25px;"
                                   "border: 3px solid ;"
                                   "border-radius : 20px;"
-                                  "border-color:yellow;");
+                                  "border-color:yellow;"
+                                  "background-color:white;");
                 }else{
                     setStyleSheet("font-size : 25px;"
                                   "border: 3px solid ;"
                                   "border-radius : 20px;"
-                                  "border-color:black;");
+                                  "border-color:black;"
+                                  "background-color:white;");
                 }
             }else if (startBtnToggle){
-                startCalAction(this);
+                qDebug()<<showPathToggle;
+                if (!showPathToggle)
+                    startCalAction(this);
+                else{
+                    qDebug()<<"good";
+                    showP(this);
+                }
             }
         }
         //qDebug()<<"t5";
@@ -116,7 +130,8 @@ void Vertex::unSelect(){
     setStyleSheet("font-size : 25px;"
                   "border: 3px solid ;"
                   "border-radius : 20px;"
-                  "border-color:black;");
+                  "border-color:black;"
+                  "background-color:white;");
     qDebug()<<"w6";
 }
 

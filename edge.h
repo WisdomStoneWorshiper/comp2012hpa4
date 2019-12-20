@@ -17,6 +17,8 @@ public:
     Vertex * getSecondPoint();
     bool contains(Vertex*);
     int getDistance();
+    void turnBlue();
+    void resetColor();
 signals:
     void deleteAction(Edge*);
 public slots:
@@ -25,6 +27,7 @@ public slots:
     void mousePressEvent(QMouseEvent *ev) override;
 
 private:
+    QColor color;
     QPoint drawAreaLefttop;
     int distance;
     //QPainter * painter;

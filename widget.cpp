@@ -13,7 +13,9 @@ Widget::Widget(QWidget *parent)
     ui->addVertexBtn->setCheckable(true);
     ui->addEdgeBtn->setCheckable(true);
     ui->startCalcalationBtn->setCheckable(true);
-
+    ui->showPathBtn->setCheckable(true);
+    ui->clearBtn->setEnabled(false);
+    ui->showPathBtn->setEnabled(false);
     //connect(this,SIGNAL(ui->addVertexBtn->toggled(bool)),Vertex,SLOT(changeBtnState(bool)));
 }
 
@@ -35,6 +37,8 @@ void Widget::mousePressEvent(QMouseEvent *event){
     connect(v,SIGNAL(addEdgeAction(Vertex *, const bool &)),this,SLOT(leftClickVertex(Vertex *, const bool &)));
     connect(ui->startCalcalationBtn,SIGNAL(toggled(bool)),v,SLOT(catchStartBtnState(bool)));
     connect(v,SIGNAL(startCalAction(Vertex*)),this,SLOT(startCalcalationAction(Vertex*)));
+    connect(v,SIGNAL(showP(Vertex*)),this,SLOT(showPathAction(Vertex*)));
+    connect(ui->showPathBtn,SIGNAL(toggled(bool)),v,SLOT(catchShowPathBtnState(bool)));
     //connect(v,SIGNAL(moveEdgeAction(Vertex *)),this,SLOT(moveVertex(Vertex *)));
     }
 }
@@ -57,7 +61,8 @@ void Widget::leftClickVertex(Vertex* v, const bool & state){
             bool ok=false;
             int distance=QInputDialog::getInt(this, "", "Plaese input the distance",0,0,INT_MAX,1,&ok);
             if (ok){
-                Edge * e=new Edge(edgePoint.front(),edgePoint.back(), distance,this);
+                Edge * e=new Edge(edgePoint.front(),edgePoint.back(), distance,ui->label);
+                e->lower();
                 connect(e,SIGNAL(deleteAction(Edge*)),this,SLOT(deleteEdgeAction(Edge*)));
                 m.addEdge(e);
                 //e->lower();
@@ -90,10 +95,22 @@ void Widget::on_addEdgeBtn_toggled(bool checked)
 
 void Widget::on_startCalcalationBtn_toggled(bool checked)
 {
-
+    if (checked){
+        ui->addVertexBtn->setChecked(!checked);
+        ui->addEdgeBtn->setChecked(!checked);
+        ui->clearBtn->setEnabled(true);
+        ui->showPathBtn->setEnabled(true);
+    }else{
+        ui->clearBtn->setEnabled(false);
+        ui->showPathBtn->setEnabled(false);
+    }
 }
 
 void Widget::startCalcalationAction(Vertex* target){
     //qDebug()<<"3";
     m.startDijkstra(target);
+}
+
+void Widget::showPathAction(Vertex* target){
+    m.showPath(target);
 }
