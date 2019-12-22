@@ -1,5 +1,5 @@
 #include "vertex.h"
-//#include <QDebug>
+#include <QDebug>
 #include <QPainter>
 #include <QBitmap>
 #include <QFont>
@@ -98,6 +98,8 @@ static bool isHover = false;
         int new_y = y()+dy;
 
         move(new_x, new_y);
+
+        //qDebug()<<e->pos().x()<<e->pos().y();
         //moveEdgeAction(this);
         //qDebug()<<"t3";
     }else if (event->type() == QEvent::MouseButtonRelease && isHover){
@@ -148,4 +150,44 @@ void Vertex::setDistance(int d){
 
 int Vertex::getDistance(){
     return tentativeDistance;
+}
+
+void Vertex::turnBlue(){
+    setStyleSheet("font-size : 25px;"
+                  "border: 3px solid ;"
+                  "border-radius : 20px;"
+                  "border-color:blue;"
+                  "background-color:white;");
+}
+
+void Vertex::turnGreen(){
+    setStyleSheet("font-size : 25px;"
+                  "border: 3px solid ;"
+                  "border-radius : 20px;"
+                  "border-color:green;"
+                  "background-color:white;");
+}
+
+void Vertex::turnRed(){
+    setStyleSheet("font-size : 25px;"
+                  "border: 3px solid ;"
+                  "border-radius : 20px;"
+                  "border-color:red;"
+                  "background-color:white;");
+}
+
+void Vertex::turnGrey(){
+    setStyleSheet("font-size : 25px;"
+                  "border: 3px solid ;"
+                  "border-radius : 20px;"
+                  "border-color:grey;"
+                  "background-color:white;");
+}
+
+void Vertex::turnCyan(){
+    setStyleSheet("font-size : 25px;"
+                  "border: 3px solid ;"
+                  "border-radius : 20px;"
+                  "border-color:cyan;"
+                  "background-color:white;");
 }

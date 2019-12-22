@@ -18,6 +18,11 @@ public:
     void showTentativeDistance();
     void setDistance(int);
     int getDistance();
+    void turnBlue();
+    void turnGreen();
+    void turnRed();
+    void turnGrey();
+    void turnCyan();
 signals:
     void deleteAction(Vertex*, bool &);
     void addEdgeAction(Vertex*,const bool &);

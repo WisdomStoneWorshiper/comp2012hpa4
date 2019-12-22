@@ -7,6 +7,9 @@
 #include <QInputDialog>
 #include "manager.h"
 #include "vertex.h"
+#include <QMessageBox>
+#include <cstdlib>
+#include <ctime>
 
 using namespace std;
 
@@ -38,9 +41,14 @@ private slots:
 
     void on_clearBtn_clicked();
 
+    void on_stepBtn_clicked();
+
+    void on_randGenBtn_clicked();
+
 private:
     Ui::Widget *ui;
     Manager m;
     std::list<Vertex *> edgePoint;
+    void addVertexAction(const int &,const int &);
 };
 #endif // WIDGET_H

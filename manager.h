@@ -26,11 +26,16 @@ public:
     void resetAllEdgeColor();
     void clearResult();
     bool isLocked();
+    bool edgeExist(Vertex*,Vertex*);
+    Vertex* getVertex(const int &);
+    //bool step();
 private:
     std::vector<list<Vertex*>> v_list;
     std::vector<Edge*> e_list;
     std::vector<list<Vertex*>> result;
     bool locked;
+//    Hashtable* unvisitVertexTable;
+//    AVL* pq;
    // QWidget * mainWin;
 };
 

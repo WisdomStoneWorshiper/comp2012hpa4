@@ -94,28 +94,15 @@ void Manager::startDijkstra(Vertex *startPoint){
         //pq.print();
         Vertex* current=pq.removeShortest();
         //qDebug()<<"After remove shortest";
-        pq.print();
+        //pq.print();
         //qDebug()<<"currentId"<<current->getId();
         if (!unvisitVertexTable->containVertex(current)){
             //qDebug()<<pq.is_empty();
             continue;
         }else
             unvisitVertexTable->removeVertex(current);
-        //qDebug()<<"i am here";
-//        for(int i=0;i<v_list.size();++i){
-//            QString l;
-//            for(list<Vertex*>::iterator j=v_list[i].begin();j!=v_list[i].end();++j){
-//                l=l+" "+QString::number((*j)->getId());
-//            }
-//            qDebug()<<l;
-//        }
         vector<list<Vertex*>>::iterator t=find_if(v_list.begin(),v_list.end(),
                                         [&](list<Vertex*> temp){return temp.front()==current;});
-        QString r;
-        for (list<Vertex*>::iterator j=t->begin();j!=t->end();++j){
-            r=r+" "+QString::number((*j)->getId());
-        }
-        //qDebug()<<"line98"<<r;
         for (list<Vertex*>::iterator i=++t->begin();i!=t->end();++i){
 
             if (!unvisitVertexTable->containVertex(*i)){
@@ -178,10 +165,56 @@ void Manager::clearResult(){
     resetAllEdgeColor();
     for (int i=0;i<result.size();++i){
         result[i].front()->setDistance(-1);
+        result[i].front()->showTentativeDistance();
         result[i].clear();
     }
+    result.clear();
 }
 
 bool Manager::isLocked(){
     return locked;
 }
+
+bool Manager::edgeExist(Vertex* v1,Vertex* v2){
+    for (int i=0;i<e_list.size();++i){
+        if (e_list[i]->contains(v1) && e_list[i]->contains(v2))
+            return true;
+    }
+    return false;
+}
+
+Vertex* Manager::getVertex(const int & pos){
+    return v_list[pos].front();
+}
+
+//bool Manager::step(){
+//    static int state=0;
+//    switch(state){
+//    case 0:
+//        vector<list<Vertex*>>::iterator target=find_if(v_list.begin(),v_list.end(),
+//                                        [&](list<Vertex*> t){return t.front()==startPoint;});
+//        if (target->front()==target->back()){
+//            QMessageBox msg;
+//            msg.setText("No Path exists");
+//            msg.exec();
+//            return true;
+//        }
+//        if (locked)
+//            return true;
+//        else
+//            locked=true;
+//        Hashtable* unvisitVertexTable{new Hashtable()};
+//        for (int i=0;i<v_list.size();++i){
+//            unvisitVertexTable->insertVertex(v_list[i].front());
+//            //qDebug()<<"hashloop"<<v_list[i].front()->getId();
+//            list<Vertex*>temp;
+//            temp.push_back(v_list[i].front());
+//            result.push_back(temp);
+//        }
+//        startPoint->setDistance(0);
+//        startPoint->repaint();
+//        //qDebug()<<"startp"<<startPoint->getId();
+//        AVL pq;
+//        pq.insert(startPoint,0);
+//    }
+//}
