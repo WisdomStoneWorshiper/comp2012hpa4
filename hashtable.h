@@ -8,13 +8,14 @@ class Hashtable
 {
 public:
     Hashtable();
-    void insertVertex(Vertex*);
-    void removeVertex(Vertex*);
-    bool containVertex(Vertex*);
-    Vertex * getVertex(const int &);
+    void insertVertex(Vertex *);
+    void removeVertex(Vertex *);
+    bool containVertex(Vertex *);
+    Vertex *getVertex(const int &);
+
 private:
-    list <Vertex*> table[50];
-    const int HASHKEY=15973;
+    list<Vertex *> table[50];
+    const int HASHKEY = 15973;
 };
 
 #endif // HASHTABLE_H

@@ -14,7 +14,10 @@
 using namespace std;
 
 QT_BEGIN_NAMESPACE
-namespace Ui { class Widget; }
+namespace Ui
+{
+class Widget;
+}
 QT_END_NAMESPACE
 
 class Widget : public QWidget
@@ -24,17 +27,15 @@ class Widget : public QWidget
 public:
     Widget(QWidget *parent = nullptr);
     ~Widget();
-    //void paintEvent(QPaintEvent *event) override;
-    //bool event(QEvent *event) override;
     void mousePressEvent(QMouseEvent *event) override;
 public slots:
-    void deleteEdgeAction(Edge*, bool &);
-    void startCalcalationAction(Vertex*);
-    void showPathAction(Vertex*);
+    void deleteEdgeAction(Edge *, bool &);
+    void startCalcalationAction(Vertex *);
+    void showPathAction(Vertex *);
 private slots:
     void on_addVertexBtn_toggled(bool checked);
-    void rightClickVertex(Vertex*, bool &);
-    void leftClickVertex(Vertex*,const bool &);
+    void rightClickVertex(Vertex *, bool &);
+    void leftClickVertex(Vertex *, const bool &);
 
     void on_addEdgeBtn_toggled(bool checked);
     void on_startCalcalationBtn_toggled(bool checked);
@@ -49,6 +50,6 @@ private:
     Ui::Widget *ui;
     Manager m;
     std::list<Vertex *> edgePoint;
-    void addVertexAction(const int &,const int &);
+    void addVertexAction(const int &, const int &);
 };
 #endif // WIDGET_H

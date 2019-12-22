@@ -1,158 +1,166 @@
 #include "vertex.h"
-#include <QDebug>
-#include <QPainter>
-#include <QBitmap>
-#include <QFont>
 
-Vertex::Vertex(int x, int y, QWidget * parent):QLabel(parent)
+Vertex::Vertex(int x, int y, QWidget *parent) : QLabel(parent)
 {
-    id=nextID++;
-    edgeBtnToggle=false;
-    startBtnToggle=false;
-    showPathToggle=false;
-    selected=false;
-    visited=false;
-    tentativeDistance=-1;
+    id = nextID++;
+    edgeBtnToggle = false;
+    startBtnToggle = false;
+    showPathToggle = false;
+    selected = false;
+    visited = false;
+    tentativeDistance = -1;
     setVisible(true);
-    setGeometry(x-40,y-40,40,40);
+    setGeometry(x - 40, y - 40, 40, 40);
     setStyleSheet("font-size : 25px;"
                   "border: 3px solid ;"
                   "border-radius : 20px;"
                   "border-color:black;"
                   "background-color:white;");
     installEventFilter(this);
-    //setText("y");
 }
 
-Vertex::~Vertex(){
-
+Vertex::~Vertex()
+{
 }
 
-int Vertex::getId() const{
+int Vertex::getId() const
+{
     return id;
 }
 
-void Vertex::catchEdgeBtnState(bool state){
-    edgeBtnToggle=state;
-    //qDebug()<<"yo";
+void Vertex::catchEdgeBtnState(const bool &state)
+{
+    edgeBtnToggle = state;
 }
 
-void Vertex::catchStartBtnState(bool state){
-    startBtnToggle=state;
+void Vertex::catchStartBtnState(const bool &state)
+{
+    startBtnToggle = state;
 }
 
-void Vertex::catchShowPathBtnState(bool state){
-    showPathToggle=state;
+void Vertex::catchShowPathBtnState(const bool &state)
+{
+    showPathToggle = state;
 }
 
-bool Vertex::eventFilter(QObject *, QEvent *event) {
-static QPoint lastPoint;
-static bool isHover = false;
-    if (event->type()==QEvent::MouseButtonPress){
-        QMouseEvent *e = static_cast<QMouseEvent*>(event);
-        if (rect().contains(e->pos()) &&(e->button()==Qt::RightButton)){
+bool Vertex::eventFilter(QObject *, QEvent *event)
+{
+    static QPoint lastPoint;
+    static bool isHover = false;
+    if (event->type() == QEvent::MouseButtonPress)
+    {
+        QMouseEvent *e = static_cast<QMouseEvent *>(event);
+        if (rect().contains(e->pos()) && (e->button() == Qt::RightButton))
+        {
             bool canDelete;
-            deleteAction(this,canDelete);
-            if (canDelete){
-            setVisible(false);
-            this->deleteLater();
+            deleteAction(this, canDelete);
+            if (canDelete)
+            {
+                setVisible(false);
+                this->deleteLater();
+            }
+        }
+        else if (e->button() == Qt::LeftButton)
+        {
+
+            if (startBtnToggle)
+                startCalAction(this);
+
+            if (showPathToggle)
+            {
+
+                showP(this);
             }
 
-        }else if (e->button()==Qt::LeftButton){
-            if (edgeBtnToggle==false && startBtnToggle==false){
-            lastPoint = e->pos();
-            isHover = true;
-            //qDebug()<<"t2";
-            }else if (edgeBtnToggle && startBtnToggle==false){
-                selected=!selected;
-                addEdgeAction(this,selected);
-                if (selected){
+            if (edgeBtnToggle == false)
+            {
+                lastPoint = e->pos();
+                isHover = true;
+            }
+            else if (edgeBtnToggle && startBtnToggle == false)
+            {
+                selected = !selected;
+                addEdgeAction(this, selected);
+                if (selected)
+                {
                     setStyleSheet("font-size : 25px;"
                                   "border: 3px solid ;"
                                   "border-radius : 20px;"
                                   "border-color:yellow;"
                                   "background-color:white;");
-                }else{
+                }
+                else
+                {
                     setStyleSheet("font-size : 25px;"
                                   "border: 3px solid ;"
                                   "border-radius : 20px;"
                                   "border-color:black;"
                                   "background-color:white;");
                 }
-            }else if (startBtnToggle){
-                //qDebug()<<showPathToggle;
-                if (!showPathToggle)
-                    startCalAction(this);
-                else{
-                    //qDebug()<<"good";
-                    showP(this);
-                }
             }
         }
-        //qDebug()<<"t5";
-    }else if (event->type() == QEvent::MouseMove && isHover){
-        QMouseEvent *e = static_cast<QMouseEvent*>(event);
+    }
+    else if (event->type() == QEvent::MouseMove && isHover)
+    {
+        QMouseEvent *e = static_cast<QMouseEvent *>(event);
         int dx = e->pos().x() - lastPoint.x();
         int dy = e->pos().y() - lastPoint.y();
         int new_x = x() + dx;
-        int new_y = y()+dy;
+        int new_y = y() + dy;
 
         move(new_x, new_y);
-
-        //qDebug()<<e->pos().x()<<e->pos().y();
-        //moveEdgeAction(this);
-        //qDebug()<<"t3";
-    }else if (event->type() == QEvent::MouseButtonRelease && isHover){
+    }
+    else if (event->type() == QEvent::MouseButtonRelease && isHover)
+    {
 
         isHover = !isHover;
+    }
+    else if (event->type() == QEvent::Paint)
+    {
 
-    }else if (event->type()==QEvent::Paint){
-
-        if (tentativeDistance>-1){
-            QLabel::paintEvent(static_cast<QPaintEvent*>(event));
-            QFont font("Times",15);
+        if (tentativeDistance > -1)
+        {
+            QLabel::paintEvent(static_cast<QPaintEvent *>(event));
+            QFont font("Times", 15);
             QPainter painter(this);
             QColor color = Qt::black;
-            color.setAlpha(150);
             QPen pen(color);
-            //pen.setWidth(10);
             painter.setPen(pen);
             painter.setFont(font);
-            painter.drawText(QPoint(17,25),QString::number(tentativeDistance));
+            painter.drawText(QPoint(17, 25), QString::number(tentativeDistance));
         }
-        //else
-            //painter.drawText(QPoint(17,25),"");
-        //qDebug()<<tentativeDistance;
     }
 }
 
-void Vertex::showTentativeDistance(){
+void Vertex::showTentativeDistance()
+{
     //qDebug()<<"j";
     setText(QString::number(id));
     repaint();
 }
 
-void Vertex::unSelect(){
-    //qDebug()<<"w4";
-    selected=false;
-    //qDebug()<<"w5";
+void Vertex::unSelect()
+{
+    selected = false;
     setStyleSheet("font-size : 25px;"
                   "border: 3px solid ;"
                   "border-radius : 20px;"
                   "border-color:black;"
                   "background-color:white;");
-    //qDebug()<<"w6";
 }
 
-void Vertex::setDistance(int d){
-    tentativeDistance=d;
+void Vertex::setDistance(const int &d)
+{
+    tentativeDistance = d;
 }
 
-int Vertex::getDistance(){
+int Vertex::getDistance()
+{
     return tentativeDistance;
 }
 
-void Vertex::turnBlue(){
+void Vertex::turnBlue()
+{
     setStyleSheet("font-size : 25px;"
                   "border: 3px solid ;"
                   "border-radius : 20px;"
@@ -160,7 +168,8 @@ void Vertex::turnBlue(){
                   "background-color:white;");
 }
 
-void Vertex::turnGreen(){
+void Vertex::turnGreen()
+{
     setStyleSheet("font-size : 25px;"
                   "border: 3px solid ;"
                   "border-radius : 20px;"
@@ -168,7 +177,8 @@ void Vertex::turnGreen(){
                   "background-color:white;");
 }
 
-void Vertex::turnRed(){
+void Vertex::turnRed()
+{
     setStyleSheet("font-size : 25px;"
                   "border: 3px solid ;"
                   "border-radius : 20px;"
@@ -176,7 +186,8 @@ void Vertex::turnRed(){
                   "background-color:white;");
 }
 
-void Vertex::turnGrey(){
+void Vertex::turnGrey()
+{
     setStyleSheet("font-size : 25px;"
                   "border: 3px solid ;"
                   "border-radius : 20px;"
@@ -184,10 +195,20 @@ void Vertex::turnGrey(){
                   "background-color:white;");
 }
 
-void Vertex::turnCyan(){
+void Vertex::turnCyan()
+{
     setStyleSheet("font-size : 25px;"
                   "border: 3px solid ;"
                   "border-radius : 20px;"
                   "border-color:cyan;"
+                  "background-color:white;");
+}
+
+void Vertex::turnBlack()
+{
+    setStyleSheet("font-size : 25px;"
+                  "border: 3px solid ;"
+                  "border-radius : 20px;"
+                  "border-color:black;"
                   "background-color:white;");
 }

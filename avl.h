@@ -5,16 +5,18 @@
 #include <list>
 class AVL;
 
-struct AVLNode{
-    list<Vertex*> content;
+struct AVLNode
+{
+    list<Vertex *> content;
     int distance;
     int height;
-    AVLNode* left;
-    AVLNode* right;
-    AVLNode(Vertex* v, int d):distance(d), height(0){
+    AVLNode *left;
+    AVLNode *right;
+    AVLNode(Vertex *v, const int &d) : distance(d), height(0)
+    {
         content.push_back(v);
-        left=nullptr;
-        right=nullptr;
+        left = nullptr;
+        right = nullptr;
     }
 };
 
@@ -23,29 +25,23 @@ class AVL
 public:
     AVL();
     ~AVL();
-    //Vertex* findMin();
-    void insert(Vertex*,int);
-    void remove(Vertex*,int);
-    Vertex* removeShortest();
+    void insert(Vertex *, const int &);
+    void remove(Vertex *, const int &);
+    Vertex *removeShortest();
     bool is_empty();
-    void print(AVLNode*,int);
-    void print();
+
 private:
-    AVLNode* root{nullptr};
-//    AVL* leftSubtree() ;
-//    AVL* rightSubtree() ;
+    AVLNode *root{nullptr};
     int height(AVLNode *);
     int balanceFactor(AVLNode *);
     void calcalateHeight(AVLNode *);
-    AVLNode * rotateLeft(AVLNode *);
-    AVLNode * rotateRight(AVLNode *);
-    AVLNode * balance(AVLNode *);
-    AVLNode * insert(AVLNode *, Vertex*, int);
-    AVLNode * remove(AVLNode *, Vertex*, int);
-    AVLNode * findMin(AVLNode *);
-    AVLNode * removeMin(AVLNode *);
+    AVLNode *rotateLeft(AVLNode *);
+    AVLNode *rotateRight(AVLNode *);
+    AVLNode *balance(AVLNode *);
+    AVLNode *insert(AVLNode *, Vertex *, const int &);
+    AVLNode *remove(AVLNode *, Vertex *, const int &);
+    AVLNode *findMin(AVLNode *);
+    AVLNode *removeMin(AVLNode *);
 };
-
-
 
 #endif // AVL_H

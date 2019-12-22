@@ -3,6 +3,9 @@
 
 #include <QLabel>
 #include <QMouseEvent>
+#include <QPainter>
+#include <QBitmap>
+#include <QFont>
 
 using namespace std;
 
@@ -16,24 +19,25 @@ public:
     int getId() const;
     void unSelect();
     void showTentativeDistance();
-    void setDistance(int);
+    void setDistance(const int &);
     int getDistance();
     void turnBlue();
     void turnGreen();
     void turnRed();
     void turnGrey();
     void turnCyan();
+    void turnBlack();
 signals:
-    void deleteAction(Vertex*, bool &);
-    void addEdgeAction(Vertex*,const bool &);
-    void startCalAction(Vertex*);
-    void showP(Vertex*);
-    //void moveEdgeAction(Vertex*);
+    void deleteAction(Vertex *, bool &);
+    void addEdgeAction(Vertex *, const bool &);
+    void startCalAction(Vertex *);
+    void showP(Vertex *);
 public slots:
     bool eventFilter(QObject *, QEvent *event) override;
-    void catchEdgeBtnState(bool);
-    void catchStartBtnState(bool);
-    void catchShowPathBtnState(bool);
+    void catchEdgeBtnState(const bool &);
+    void catchStartBtnState(const bool &);
+    void catchShowPathBtnState(const bool &);
+
 private:
     int id, tentativeDistance;
     bool edgeBtnToggle, selected, visited, startBtnToggle, showPathToggle;
