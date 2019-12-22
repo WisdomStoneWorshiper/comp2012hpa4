@@ -20,7 +20,7 @@ public:
     void turnBlue();
     void resetColor();
 signals:
-    void deleteAction(Edge*);
+    void deleteAction(Edge*, bool &);
 public slots:
     //bool eventFilter(QObject *, QEvent *event) override;
     void paintEvent(QPaintEvent *) override;

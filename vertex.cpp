@@ -1,5 +1,5 @@
 #include "vertex.h"
-#include <QDebug>
+//#include <QDebug>
 #include <QPainter>
 #include <QBitmap>
 #include <QFont>
@@ -34,7 +34,7 @@ int Vertex::getId() const{
 
 void Vertex::catchEdgeBtnState(bool state){
     edgeBtnToggle=state;
-    qDebug()<<"yo";
+    //qDebug()<<"yo";
 }
 
 void Vertex::catchStartBtnState(bool state){
@@ -51,16 +51,18 @@ static bool isHover = false;
     if (event->type()==QEvent::MouseButtonPress){
         QMouseEvent *e = static_cast<QMouseEvent*>(event);
         if (rect().contains(e->pos()) &&(e->button()==Qt::RightButton)){
+            bool canDelete;
+            deleteAction(this,canDelete);
+            if (canDelete){
             setVisible(false);
-            //update();
-            deleteAction(this->id);
             this->deleteLater();
+            }
 
         }else if (e->button()==Qt::LeftButton){
             if (edgeBtnToggle==false && startBtnToggle==false){
             lastPoint = e->pos();
             isHover = true;
-            qDebug()<<"t2";
+            //qDebug()<<"t2";
             }else if (edgeBtnToggle && startBtnToggle==false){
                 selected=!selected;
                 addEdgeAction(this,selected);
@@ -78,11 +80,11 @@ static bool isHover = false;
                                   "background-color:white;");
                 }
             }else if (startBtnToggle){
-                qDebug()<<showPathToggle;
+                //qDebug()<<showPathToggle;
                 if (!showPathToggle)
                     startCalAction(this);
                 else{
-                    qDebug()<<"good";
+                    //qDebug()<<"good";
                     showP(this);
                 }
             }
@@ -103,36 +105,41 @@ static bool isHover = false;
         isHover = !isHover;
 
     }else if (event->type()==QEvent::Paint){
-        QLabel::paintEvent(static_cast<QPaintEvent*>(event));
-        QFont font("Times",15);
-        QPainter painter(this);
-        QColor color = Qt::black;
-        color.setAlpha(150);
-        QPen pen(color);
-        //pen.setWidth(10);
-        painter.setPen(pen);
-        painter.setFont(font);
-        painter.drawText(QPoint(17,25),QString::number(tentativeDistance));
+
+        if (tentativeDistance>-1){
+            QLabel::paintEvent(static_cast<QPaintEvent*>(event));
+            QFont font("Times",15);
+            QPainter painter(this);
+            QColor color = Qt::black;
+            color.setAlpha(150);
+            QPen pen(color);
+            //pen.setWidth(10);
+            painter.setPen(pen);
+            painter.setFont(font);
+            painter.drawText(QPoint(17,25),QString::number(tentativeDistance));
+        }
+        //else
+            //painter.drawText(QPoint(17,25),"");
         //qDebug()<<tentativeDistance;
     }
 }
 
 void Vertex::showTentativeDistance(){
-    qDebug()<<"j";
+    //qDebug()<<"j";
     setText(QString::number(id));
     repaint();
 }
 
 void Vertex::unSelect(){
-    qDebug()<<"w4";
+    //qDebug()<<"w4";
     selected=false;
-    qDebug()<<"w5";
+    //qDebug()<<"w5";
     setStyleSheet("font-size : 25px;"
                   "border: 3px solid ;"
                   "border-radius : 20px;"
                   "border-color:black;"
                   "background-color:white;");
-    qDebug()<<"w6";
+    //qDebug()<<"w6";
 }
 
 void Vertex::setDistance(int d){

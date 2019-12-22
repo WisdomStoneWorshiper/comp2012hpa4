@@ -32,7 +32,7 @@ void Widget::mousePressEvent(QMouseEvent *event){
     Vertex* v=new Vertex(event->x(), event->y(), ui->label);
     m.addVertex(v);
     //v->showTentativeDistance();
-    connect(v,SIGNAL(deleteAction(const int &)), this, SLOT(rightClickVertex(const int &)));
+    connect(v,SIGNAL(deleteAction(Vertex*, bool &)), this, SLOT(rightClickVertex(Vertex*, bool &)));
     connect(ui->addEdgeBtn, SIGNAL(toggled(bool)),v, SLOT(catchEdgeBtnState(bool)));
     connect(v,SIGNAL(addEdgeAction(Vertex *, const bool &)),this,SLOT(leftClickVertex(Vertex *, const bool &)));
     connect(ui->startCalcalationBtn,SIGNAL(toggled(bool)),v,SLOT(catchStartBtnState(bool)));
@@ -49,8 +49,10 @@ void Widget::on_addVertexBtn_toggled(bool checked)
         ui->addEdgeBtn->setChecked(!checked);
 }
 
-void Widget::rightClickVertex(const int & id){
-    m.deleteVertex(id);
+void Widget::rightClickVertex(Vertex* target, bool & canDelete){
+    canDelete=!m.isLocked();
+    if (canDelete)
+        m.deleteVertex(target);
 }
 
 void Widget::leftClickVertex(Vertex* v, const bool & state){
@@ -63,15 +65,12 @@ void Widget::leftClickVertex(Vertex* v, const bool & state){
             if (ok){
                 Edge * e=new Edge(edgePoint.front(),edgePoint.back(), distance,ui->label);
                 e->lower();
-                connect(e,SIGNAL(deleteAction(Edge*)),this,SLOT(deleteEdgeAction(Edge*)));
+                connect(e,SIGNAL(deleteAction(Edge*,bool&)),this,SLOT(deleteEdgeAction(Edge*,bool&)));
                 m.addEdge(e);
                 //e->lower();
                 m.connectVertex(edgePoint);
-                qDebug()<<"w1";
                 edgePoint.back()->unSelect();
-                qDebug()<<"w2";
                 edgePoint.front()->unSelect();
-                qDebug()<<"w3";
                 edgePoint.clear();
             }else{
                 edgePoint.back()->unSelect();
@@ -83,8 +82,11 @@ void Widget::leftClickVertex(Vertex* v, const bool & state){
     }
 }
 
-void Widget::deleteEdgeAction(Edge* target){
-    m.deleteEdge(target);
+void Widget::deleteEdgeAction(Edge* target, bool & canDelete){
+    qDebug()<<m.isLocked();
+    canDelete=!m.isLocked();
+    if (canDelete)
+        m.deleteEdge(target);
 }
 
 void Widget::on_addEdgeBtn_toggled(bool checked)
@@ -98,6 +100,8 @@ void Widget::on_startCalcalationBtn_toggled(bool checked)
     if (checked){
         ui->addVertexBtn->setChecked(!checked);
         ui->addEdgeBtn->setChecked(!checked);
+        ui->addVertexBtn->setEnabled(false);
+        ui->addEdgeBtn->setEnabled(false);
         ui->clearBtn->setEnabled(true);
         ui->showPathBtn->setEnabled(true);
     }else{
@@ -112,5 +116,16 @@ void Widget::startCalcalationAction(Vertex* target){
 }
 
 void Widget::showPathAction(Vertex* target){
+    m.resetAllEdgeColor();
     m.showPath(target);
+}
+
+void Widget::on_clearBtn_clicked()
+{   ui->clearBtn->setEnabled(false);
+    ui->startCalcalationBtn->setChecked(false);
+    ui->showPathBtn->setChecked(false);
+    ui->showPathBtn->setEnabled(false);
+    ui->addVertexBtn->setEnabled(true);
+    ui->addEdgeBtn->setEnabled(true);
+    m.clearResult();
 }

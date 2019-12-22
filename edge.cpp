@@ -53,9 +53,12 @@ void Edge::paintEvent(QPaintEvent * e){
 
 void Edge::mousePressEvent(QMouseEvent *ev){
     if (ev->button()==Qt::RightButton){
+        bool canDelete;
+        deleteAction(this, canDelete);
+        if (canDelete){
         setVisible(false);
-        deleteAction(this);
         this->deleteLater();
+        }
     }
 }
 

@@ -28,6 +28,8 @@ public:
     void remove(Vertex*,int);
     Vertex* removeShortest();
     bool is_empty();
+    void print(AVLNode*,int);
+    void print();
 private:
     AVLNode* root{nullptr};
 //    AVL* leftSubtree() ;

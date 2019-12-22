@@ -7,6 +7,7 @@
 #include <vector>
 #include "hashtable.h"
 #include "avl.h"
+#include <QMessageBox>
 
 class Manager
 {
@@ -15,19 +16,21 @@ public:
     ~Manager();
     //std::vector<Vertex*>& getVlist();
     void addVertex(Vertex*);
-    void deleteVertex(int);
+    void deleteVertex(Vertex*);
     void addEdge(Edge*);
     void moveEdge(Vertex *);
     void connectVertex(std::list<Vertex*> & );
     void deleteEdge(Edge*);
     void startDijkstra(Vertex*);
     void showPath(Vertex*);
-public slots:
-
+    void resetAllEdgeColor();
+    void clearResult();
+    bool isLocked();
 private:
     std::vector<list<Vertex*>> v_list;
     std::vector<Edge*> e_list;
     std::vector<list<Vertex*>> result;
+    bool locked;
    // QWidget * mainWin;
 };
 

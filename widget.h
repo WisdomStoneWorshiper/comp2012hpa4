@@ -25,16 +25,18 @@ public:
     //bool event(QEvent *event) override;
     void mousePressEvent(QMouseEvent *event) override;
 public slots:
-    void deleteEdgeAction(Edge*);
+    void deleteEdgeAction(Edge*, bool &);
     void startCalcalationAction(Vertex*);
     void showPathAction(Vertex*);
 private slots:
     void on_addVertexBtn_toggled(bool checked);
-    void rightClickVertex(const int &);
+    void rightClickVertex(Vertex*, bool &);
     void leftClickVertex(Vertex*,const bool &);
 
     void on_addEdgeBtn_toggled(bool checked);
     void on_startCalcalationBtn_toggled(bool checked);
+
+    void on_clearBtn_clicked();
 
 private:
     Ui::Widget *ui;

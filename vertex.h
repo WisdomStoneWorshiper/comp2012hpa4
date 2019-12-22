@@ -19,7 +19,7 @@ public:
     void setDistance(int);
     int getDistance();
 signals:
-    void deleteAction(const int &);
+    void deleteAction(Vertex*, bool &);
     void addEdgeAction(Vertex*,const bool &);
     void startCalAction(Vertex*);
     void showP(Vertex*);
